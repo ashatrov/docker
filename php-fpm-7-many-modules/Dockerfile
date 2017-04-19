@@ -70,3 +70,42 @@ RUN apt-get install -y \
         && make && make install) \
     && rm -rf /tmp/php-memcached-3.0.2 \
     && docker-php-ext-enable memcached.so
+
+RUN apt-get install -y \
+        autoconf \
+        g++ \
+        make \
+        openssl \
+        libssl-dev \
+        libcurl4-openssl-dev \
+        pkg-config \
+        libsasl2-dev \
+        libpcre3-dev \
+    && pecl install mongodb \
+    && docker-php-ext-enable mongodb.so
+
+RUN docker-php-ext-install mysqli
+
+RUN docker-php-ext-install pcntl
+
+RUN docker-php-ext-install pdo_mysql
+
+RUN apt-get install -y libpq-dev \
+    #docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
+    && docker-php-ext-install pdo_pgsql pgsql
+
+RUN docker-php-ext-install shmop
+
+RUN docker-php-ext-install sockets
+
+RUN docker-php-ext-install sysvmsg sysvsem sysvshm
+
+RUN docker-php-ext-install wddx
+
+RUN apt-get install libxslt-dev \
+    && docker-php-ext-install xsl
+
+RUN docker-php-ext-install opcache
+
+RUN docker-php-ext-install calendar
+
