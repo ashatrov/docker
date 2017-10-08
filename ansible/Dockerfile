@@ -12,6 +12,7 @@ RUN apt-get -y update \
       git \
       curl \
       python-pip \
+      sshpass \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
