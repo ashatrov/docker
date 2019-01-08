@@ -1,0 +1,13 @@
+
+root = /Users
+root = ssh://192.168.99.101/Users
+sshargs = -F /Users/ashatrov/my/docker/sync/.docker-machine-sync/.ssh_config
+ignore = Name 
+prefer = /Users
+follow = Regex .*
+repeat = 2
+terse = true
+dontchmod = true
+perms = 0
+fastcheck = false
+

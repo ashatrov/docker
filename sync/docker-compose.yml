@@ -1,0 +1,16 @@
+version: '2.1'
+services:
+
+  manager-pf-local:
+    image: 1.15.8-alpine
+    volumes_from:
+      - app-local
+    ports:
+      - "80:80"
+
+
+networks:
+  default:
+    external:
+      name: ${SHARED_DOCKER_NETWORK:-shared_default}
+      
