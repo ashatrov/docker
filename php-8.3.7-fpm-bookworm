@@ -1,0 +1,71 @@
+FROM php:8.3.7-fpm-bookworm
+
+RUN apt-get update \
+    && export DEBIAN_FRONTEND=noninteractive \
+    && apt-get install -y --no-install-recommends \
+        apt-utils \
+        nano \
+        vim \
+	    procps \
+        ca-certificates \
+        pcntl \
+    \
+    \
+    && pecl channel-update pecl.php.net \
+    \
+    \
+    && apt-get install -y --no-install-recommends \
+        libzip-dev \
+        zip \
+    && docker-php-ext-configure zip \
+    && docker-php-ext-install -j$(nproc) zip \
+    \
+    \
+    && docker-php-ext-install -j$(nproc) \
+        pdo_mysql \
+        opcache \
+        pcntl \
+        mysqli \
+        calendar \
+        exif \
+    \
+    \
+    && pecl install apcu \
+    && docker-php-ext-enable apcu \
+    \
+    \
+    && pecl install igbinary \
+    && docker-php-ext-enable igbinary \
+    && pecl install -D 'enable-redis-igbinary="yes"' redis \
+    && docker-php-ext-enable redis \
+    \
+    \
+    && apt-get install -y \
+        librabbitmq-dev \
+        libssh-dev \
+    && docker-php-ext-install -j$(nproc) \
+        bcmath \
+        sockets \
+    && pecl install amqp \
+    && docker-php-ext-enable amqp \
+    \
+    \
+    && apt-get install -y --no-install-recommends libmagickwand-dev \
+    && pecl install imagick \
+    && docker-php-ext-enable imagick \
+    \
+    \
+    && apt-get install -y --no-install-recommends libicu-dev \
+    && docker-php-ext-install -j$(nproc) intl \
+    \
+    \
+    #&& apt install -y --no-install-recommends libxml2-dev \
+    #&& docker-php-ext-install -j$(nproc) simplexml \
+    \
+    \
+    && pecl clear-cache \
+    && apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* /usr/share
+
+ARG DOCKERFILE_PATH=.
+COPY ${DOCKERFILE_PATH}/configs/conf.d/* /usr/local/etc/php/conf.d/
+COPY ${DOCKERFILE_PATH}/configs/php-override.ini /usr/local/etc/php/conf.d/php-override.ini
